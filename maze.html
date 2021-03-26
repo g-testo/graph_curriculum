@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>Maze</title>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script src="mazegenerator.js"></script>
+<style type="text/css">
+    #maze {
+        border-spacing: 0;
+        border-collapse: collapse;
+        position: relative;
+    }
+    td {
+        padding: 0; 
+        margin: 0;
+    }
+    svg{
+        position: absolute;
+        top:0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+    <table id="maze">
+        <tbody></tbody>
+    </table>
+
+    <button onclick="showSolution()">Show Shortest Path</button>
+
+    <script>
+        let height=50;
+        let width=50;
+        let graph = new Graph(width, height);
+        let disp = graph.visualize();
+        let solutionPath = graph.bfs(0, width*height-1);
+
+        let count=0;
+        $('#maze').css('width', 22*width);
+        for (var i = 0; i < disp.length; i++) {
+            $('#maze > tbody').append("<tr>");
+            for (var j = 0; j < disp[i].length; j++) {
+                var selector = i+"-"+j;                
+                $('#maze > tbody').append(`<td id="${selector}" class="square-${count}">&nbsp;</td>`);
+                if (disp[i][j][0] == 1) { $('#'+selector).css('border-top', '1px solid black'); }
+                if (disp[i][j][1] == 1) { $('#'+selector).css('border-right', '1px solid black'); }
+                if (disp[i][j][2] == 1) { $('#'+selector).css('border-bottom', '1px solid black'); }
+                if (disp[i][j][3] == 1) { $('#'+selector).css('border-left', '1px solid black'); }
+                count++;
+            }
+            $('#maze > tbody').append("</tr>");
+        }
+        let lines = "";
+        for(let i=0; i<solutionPath.length-1;i++){
+            let startNode = document.getElementsByClassName("square-" + solutionPath[i])[0];
+            let startCenterX = startNode.offsetLeft + startNode.offsetWidth / 2;
+            let startCenterY = startNode.offsetTop + startNode.offsetHeight / 2;
+
+            let endNode = document.getElementsByClassName("square-" + solutionPath[i+1])[0];
+            let endCenterX = endNode.offsetLeft + endNode.offsetWidth / 2;
+            let endCenterY = endNode.offsetTop + endNode.offsetHeight / 2;
+            lines+=`<line x1=${startCenterX} y1=${startCenterY} x2=${endCenterX} y2=${endCenterY} stroke="black" stroke-width="2"/>`;
+        }
+        $('#maze').append(`<svg style="display:none;" width=${width*22} height=${height*22}>${lines}</svg>`);
+        function showSolution(){
+            $('svg').css("display", "block");
+        }
+    </script>
+
+</body>
+</html>

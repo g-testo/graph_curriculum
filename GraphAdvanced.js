@@ -55,11 +55,42 @@ class Graph{
             this.adjMap.set(destVertex, destEdges);
         }
     }
-    
+    dfs(srcId){
+        let visited = [];
+        let stack = [srcId];
+        while(stack.length > 0){
+            let currentVertexId = stack.pop();
+            if(!visited.includes(currentVertexId)){
+                visited.push(currentVertexId);
+                let edgeList = this.adjMap.get(this.getVertex(currentVertexId));
+                for(let i=0; i<edgeList.length;i++){
+                    stack.push(this.weighted ? edgeList[i].id : edgeList[i]);
+                }
+            }
+        }
+        return visited;
+    }
+    bfs(srcId){
+        let visited = [];
+        let queue = [srcId];
+        while(queue.length > 0){
+            let currentVertexId = queue.shift();
+            if(!visited.includes(currentVertexId)){
+                visited.push(currentVertexId);
+                let edgeList = this.adjMap.get(this.getVertex(currentVertexId));
+                for(let i=0; i<edgeList.length;i++){
+                    queue.push(this.weighted ? edgeList[i].id : edgeList[i]);
+                }
+            }
+        }
+        return visited;
+    }
 
 }
-let graph = new Graph(false, true);
+let graph = new Graph(true, true);
 
+
+// 0 > 1 > 2 > 3
 
 graph.addVertex(0, "Zero");
 graph.addVertex(1, "One");
@@ -69,9 +100,12 @@ graph.addVertex(3, "Three");
 graph.addEdge(0, 1, 15);
 graph.addEdge(1, 2, 5);
 graph.addEdge(2, 3, 25);
-graph.addEdge(3, 0, 50);
+// graph.addEdge(3, 0, 50);
 
-console.log(util.inspect(graph, true, 5, true));
+// console.log(util.inspect(graph, true, 5, true));
+
+let result = graph.bfs(3);
+console.log(result);
 
 // let result = graph.getVertex(0);
 
