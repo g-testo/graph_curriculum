@@ -6,9 +6,9 @@ class Graph{
         }
         this.numVerts=numVerts;
     }
-    addEdge(i,j){
-        this.adjMatrix[i][j]=1;
-        this.adjMatrix[j][i]=1;
+    addEdge(vertex1,vertex2){
+        this.adjMatrix[vertex1][vertex2]=1;
+        this.adjMatrix[vertex2][vertex1]=1;
     }
     print(){
         let str="";
@@ -30,4 +30,12 @@ graph.addEdge(1, 2);
 graph.addEdge(2, 0);
 graph.addEdge(2, 3);
 
+
+//      0  1  2  3
+// 0 [[ 0, 1, 1, 0 ], 
+// 1  [ 1, 0, 1, 0 ],
+// 2  [ 1, 1, 0, 1 ], 
+// 3  [ 0, 0, 1, 0 ] ]
+
+// console.log(graph);
 graph.print();
